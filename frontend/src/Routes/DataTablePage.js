@@ -2,7 +2,7 @@ import React from 'react';
 import Sidebar from '../Components/Sidebar';
 import { Table } from '../Components/Table';
 
-export const DataTable = () => {
+export const DataTablePage = () => {
     return (
         <div>
             <Sidebar/>
