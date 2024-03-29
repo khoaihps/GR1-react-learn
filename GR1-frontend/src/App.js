@@ -1,5 +1,4 @@
 import React from 'react';
-import Sidebar from './Components/Sidebar';
 import { DataTablePage } from './Routes/DataTablePage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './output.css';

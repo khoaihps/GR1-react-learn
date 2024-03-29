@@ -1,8 +1,8 @@
 import React from 'react';
-import Sidebar from '../Components/Sidebar';
 import { ImageGrid } from '../Components/ImageGrid';
-
+import Sidebar from '../Components/Sidebar';
 export const ImageGridPage = () => {
+    // Danh sách đường dẫn hình ảnh mới
     const newImages = [
         "https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg",
         "https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg",
@@ -19,7 +19,7 @@ export const ImageGridPage = () => {
     ];
 
     const rows = 3;
-    const cols = 2;
+    const cols = 3;
 
     return (
         <div>
