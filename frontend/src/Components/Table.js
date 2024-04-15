@@ -62,7 +62,6 @@ export const Table = () => {
             <div className="mt-4">
                 <div className="flex overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200">
-                        {/* Header của bảng */}
                     </table>
                 </div>
             
