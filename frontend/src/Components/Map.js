@@ -1,48 +1,112 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useState } from "react";
+import GoogleMapReact from 'google-map-react';
 
-const Map = () => {
-  const [coordinates, setCoordinates] = useState({ lat: 21.0050373, lng: 105.8456577 });
-  const [address, setAddress] = useState('');
+export default function Map(){
+  const defaultProps = {
+    center: {
+      lat: 21.005696333691095,
+      lng: 105.84331525396728
+    },
+    zoom: 15,
+  };
 
-  useEffect(() => {
-    // Gọi API của Google Maps Geocoding để lấy địa chỉ từ tọa độ mặc định
-    fetch(`https://www.google.com/maps/embed/v1/place?key=API_KEY
-    &q=Space+Needle,Seattle+WA"`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.results && data.results.length > 0) {
-          setAddress(data.results[0].formatted_address);
-        } else {
-          setAddress('Address not found');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching address:', error);
-        setAddress('Cannot fetch address');
+  const [startLatLng, setStartLatLng] = useState(null);
+  const [endLatLng, setEndLatLng] = useState(null);
+  const [selectingStart, setSelectingStart] = useState(false);
+  const [selectingEnd, setSelectingEnd] = useState(false);
+  const [distance, setDistance] = useState(null); 
+
+  const handleStartSelect = () => {
+    setSelectingStart(true); 
+    setSelectingEnd(false); 
+  };
+
+  const handleEndSelect = () => {
+    setSelectingStart(false); 
+    setSelectingEnd(true);
+  };
+
+  const handleMapClick = (event) => {
+    if (selectingStart) {
+      setStartLatLng({
+        lat: event.lat,
+        lng: event.lng
       });
-  }, [coordinates]);
+    } else if (selectingEnd) {
+      setEndLatLng({
+        lat: event.lat,
+        lng: event.lng
+      });
+    }
+  };
+
+  const deg2rad = (deg) => {
+    return deg * (Math.PI/180);
+  };
+
+  const haversine = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = deg2rad(lat2 - lat1);
+    const dLon = deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+  };
+
+  const handleCalculateDistance = () => {
+    if (startLatLng && endLatLng) {
+      const distance = haversine(startLatLng.lat, startLatLng.lng, endLatLng.lat, endLatLng.lng);
+      setDistance(distance.toFixed(2)); 
+    }
+  };
 
   return (
-    <div className="w-160 h-160 border border-gray-400 rounded-lg overflow-hidden">
-      <MapContainer center={[coordinates.lat, coordinates.lng]} zoom={13} style={{ width: '100%', height: '100%' }}>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={[coordinates.lat, coordinates.lng]}>
-          <Popup>
-            A pretty CSS3 popup. <br /> Easily customizable.
-          </Popup>
-        </Marker>
-      </MapContainer>
-      <div className="p-4">
-        <h2 className="text-xl font-bold mb-2">Selected Location:</h2>
-        <p><strong>Latitude:</strong> {coordinates.lat}</p>
-        <p><strong>Longitude:</strong> {coordinates.lng}</p>
-        <p><strong>Address:</strong> {address}</p>
+    <div className="flex">
+      <div className="h-screen w-1/2">
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: "" }} 
+          defaultCenter={defaultProps.center}
+          defaultZoom={defaultProps.zoom}
+          onClick={handleMapClick}
+        >
+        </GoogleMapReact>
+      </div>
+      <div className="w-1/2 p-4">
+        <div className="mb-4">
+          <button
+            className={`bg-${selectingStart ? 'green' : 'blue'}-500 text-white px-4 py-2 rounded`}
+            onClick={handleStartSelect}
+            style={{ textAlign: 'left', width: '200px' }}
+          >
+            <div>Chọn điểm đi:</div>
+            <div style={{ marginLeft: '10px' }}>
+              <p>Lat: {startLatLng ? startLatLng.lat : 'N/A'}</p>
+              <p>Lon: {startLatLng ? startLatLng.lng : 'N/A'}</p>
+            </div>
+          </button>
+        </div>
+        <div className="mb-4">
+          <button
+            className={`bg-${selectingEnd ? 'green' : 'blue'}-500 text-white px-4 py-2 rounded`}
+            onClick={handleEndSelect}
+            style={{ textAlign: 'left', width: '200px' }}
+          >
+            <div>Chọn điểm đến:</div>
+            <div style={{ marginLeft: '10px' }}>
+              <p>Lat: {endLatLng ? endLatLng.lat : 'N/A'}</p>
+              <p>Lon: {endLatLng ? endLatLng.lng : 'N/A'}</p>
+            </div>
+          </button>
+        </div>
+        <div className="mb-4">
+          <button className={`bg-green-500 text-white px-4 py-2 rounded`} onClick={handleCalculateDistance}>Tính khoảng cách</button>
+          <p>Khoảng cách: {distance ? `${distance} km` : 'N/A'}</p> 
+        </div>
       </div>
     </div>
   );
-};
-
-export default Map;
+}

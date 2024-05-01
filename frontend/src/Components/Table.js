@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-
+import { exportExcel, exportPDF } from '../utils/exportUtils';
 export const Table = () => {
     const [data, setData] = useState([
         { id: 1, mssv: '123456', name: 'John Doe', dob: '01/01/1990', email: 'john@example.com' },
         { id: 2, mssv: '789012', name: 'Jane Smith', dob: '02/02/1995', email: 'jane@example.com' },
-        // Thêm dữ liệu khác nếu cần
     ]);
     const [formData, setFormData] = useState({
         mssv: '',
@@ -35,6 +34,14 @@ export const Table = () => {
         const newData = [...data];
         newData.splice(index, 1);
         setData(newData);
+    };
+
+    const handleExportExcel = () => {
+        exportExcel(data, 'students.xlsx'); // Gọi hàm xuất Excel
+    };
+
+    const handleExportPDF = () => {
+        exportPDF(data, 'students.pdf'); // Gọi hàm xuất Excel
     };
 
     return (
@@ -114,6 +121,10 @@ export const Table = () => {
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div className="mt-4 flex justify-end">
+                <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-lg mr-4" onClick={handleExportExcel}>Export Excel</button>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-lg" onClick={handleExportPDF}>Export PDF</button>
             </div>
         </div>
     );
