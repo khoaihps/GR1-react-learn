@@ -92,12 +92,12 @@ const Maze = ({ maze = [] }) => {
     };
 
     const handleReset = () => {
-        setMarioPosition({ row: lastRowIndex, column: lastColumnIndex }); // Đặt lại vị trí Mario
-        setDiamondPosition({ row: 0, column: 0 }); // Hiển thị kim cương
+        setMarioPosition({ row: lastRowIndex, column: lastColumnIndex }); 
+        setDiamondPosition({ row: 0, column: 0 }); 
     };
 
     return (
-        <div className='grid flex grid-cols-2 border-4 border-blue-900 mx-3 my-4'>
+        <div className='grid grid-cols-2 border-4 border-blue-900 mx-3 my-4'>
             <div className="grid my-4 mx-4 border-2 border-blue-900" style={{ gridTemplateColumns: `repeat(${numColumns}, auto)` }}>
                 {maze.map((row, rowIndex) => (
                     row.map((cell, cellIndex) => {
@@ -107,7 +107,7 @@ const Maze = ({ maze = [] }) => {
                         return (
                             <div
                                 key={`${rowIndex}-${cellIndex}`}
-                                className={`w-36 h-36 flex items-center justify-center ${cell === 1 ? 'bg-blue-700' : 'bg-white'} border-2 border-blue-900`}
+                                className={`w-36 h-36 items-center justify-center ${cell === 1 ? 'bg-blue-700' : 'bg-white'} border-2 border-blue-900`}
                             >
                                 {isDiamondCell && <img src="https://pngfre.com/wp-content/uploads/diamond-png-image-pngfre-17.png" alt="Diamond" className="w-32 h-28" />}
                                 {isMarioCell && <img src="https://pngimg.com/uploads/mario/mario_PNG88.png" alt="Mario" className="w-32 h-28" />}
