@@ -2,29 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
-    const handleDataTableClick = () => {
-        console.log("Data Table button clicked");
-    };
-
-    const handleImageGridClick = () => {
-        console.log("Image Grid button clicked");
-    };
-
-    const handleMazeClick = () => {
-        console.log("Maze button clicked");
-    };
-
-    const handleMapClick = () => {
-        console.log("Map button clicked");
-    };
-
-    const handleChartClick = () => {
-        console.log("Chart button clicked");
-    };
-
-    const handleDataExportClick = () => {
-        console.log("Data Export button clicked");
-    };
 
     return (
         <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
