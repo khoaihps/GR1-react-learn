@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const Maze = ({ maze = [] }) => {
-    const numColumns = maze.length > 0 ? maze[0].length : 0; 
     const lastRowIndex = maze.length - 1;
     const lastColumnIndex = maze[lastRowIndex] ? maze[lastRowIndex].length - 1 : 0;
 
@@ -9,7 +8,6 @@ const Maze = ({ maze = [] }) => {
     const [marioPosition, setMarioPosition] = useState({ row: lastRowIndex, column: lastColumnIndex });
 
     useEffect(() => {
-        // Hàm xử lý sự kiện di chuyển của Mario
         const handleKeyDown = (event) => {
             const { key } = event;
             let newRow = marioPosition.row;
@@ -27,9 +25,8 @@ const Maze = ({ maze = [] }) => {
 
             setMarioPosition({ row: newRow, column: newColumn });
 
-            // Kiểm tra xem Mario có chạm vào kim cương không
             if (newRow === diamondPosition.row && newColumn === diamondPosition.column) {
-                setDiamondPosition({ row: -1, column: -1 }); // Ẩn kim cương
+                setDiamondPosition({ row: -1, column: -1 }); 
             }
         };
 
@@ -41,11 +38,10 @@ const Maze = ({ maze = [] }) => {
     }, [maze, marioPosition, lastRowIndex, lastColumnIndex, diamondPosition]);
 
     useEffect(() => {
-        // Tìm vị trí của kim cương ban đầu khi maze thay đổi
         for (let i = 0; i < maze.length; i++) {
             for (let j = 0; j < maze[i].length; j++) {
                 if (maze[i][j] === 2) {
-                    setDiamondPosition({ row: i, column: j }); // Hiển thị kim cương
+                    setDiamondPosition({ row: i, column: j }); 
                     return;
                 }
             }
@@ -56,7 +52,6 @@ const Maze = ({ maze = [] }) => {
         let newRow = marioPosition.row;
         let newColumn = marioPosition.column;
     
-        // Xác định hướng di chuyển và cập nhật vị trí mới của Mario
         switch (direction) {
             case 'up':
                 newRow--;
@@ -74,7 +69,6 @@ const Maze = ({ maze = [] }) => {
                 break;
         }
     
-        // Kiểm tra xem Mario có thể di chuyển đến vị trí mới không
         if (
             newRow >= 0 &&
             newRow <= lastRowIndex &&
@@ -84,9 +78,8 @@ const Maze = ({ maze = [] }) => {
         ) {
             setMarioPosition({ row: newRow, column: newColumn });
     
-            // Kiểm tra xem Mario có chạm vào kim cương không
             if (newRow === diamondPosition.row && newColumn === diamondPosition.column) {
-                setDiamondPosition({ row: -1, column: -1 }); // Ẩn kim cương
+                setDiamondPosition({ row: -1, column: -1 }); 
             }
         }
     };
@@ -97,42 +90,45 @@ const Maze = ({ maze = [] }) => {
     };
 
     return (
-        <div className='grid grid-cols-2 border-4 border-blue-900 mx-3 my-4'>
-            <div className="grid my-4 mx-4 border-2 border-blue-900" style={{ gridTemplateColumns: `repeat(${numColumns}, auto)` }}>
+        <div className='grid grid-cols-2 grid-rows-1 border-4 border-blue-900 mx-3 my-4 max-h-screen' >
+            <div className="grid my-4 mx-4 border-2 border-blue-900 grid-cols-6 grid-rows-8 gap-0 ">
                 {maze.map((row, rowIndex) => (
                     row.map((cell, cellIndex) => {
                         const isDiamondCell = rowIndex === diamondPosition.row && cellIndex === diamondPosition.column;
                         const isMarioCell = rowIndex === marioPosition.row && cellIndex === marioPosition.column;
-
                         return (
                             <div
                                 key={`${rowIndex}-${cellIndex}`}
-                                className={`w-36 h-36 items-center justify-center ${cell === 1 ? 'bg-blue-700' : 'bg-white'} border-2 border-blue-900`}
+                                className={` items-center ${cell === 1 ? 'bg-blue-700' : 'bg-white'} border-2 border-blue-900 `}
                             >
-                                {isDiamondCell && <img src="https://pngfre.com/wp-content/uploads/diamond-png-image-pngfre-17.png" alt="Diamond" className="w-32 h-28" />}
-                                {isMarioCell && <img src="https://pngimg.com/uploads/mario/mario_PNG88.png" alt="Mario" className="w-32 h-28" />}
+                                {isDiamondCell && <img src="https://pngfre.com/wp-content/uploads/diamond-png-image-pngfre-17.png" alt="Diamond" className="w-full h-full" />}
+                                {isMarioCell && <img src="https://pngimg.com/uploads/mario/mario_PNG88.png" alt="Mario" className="w-full h-full" />}
                             </div>
                         );
                     })
                 ))}
             </div>
-            <div className="flex border-4 border-blue-900 my-4 mx-3">
+            <div className=" border-4 border-blue-900 my-4 mx-3">
                 <div className="items-start justify-start space-y-4">
-                    <button className="px-6 py-3 text-black text-5xl font-semibold flex items-center justify-center" onClick={() => moveMario('up')}>
-                        Move Up<img className='ml-2 w-12 h-12' src="https://img.icons8.com/android/24/000000/up.png" alt="Move Up" />
+                    <button className="px-6 py-3 text-black text-3xl font-semibold flex items-center justify-center h-1/6" onClick={() => moveMario('up')} >
+                        <img className='ml-2 w-12 h-1/6' src="https://img.icons8.com/android/24/000000/up.png" alt="Move Up" />
+                        Move Up
                     </button>
-                    <button className="px-6 py-3 text-black text-5xl font-semibold flex items-center justify-center" onClick={() => moveMario('down')}>
-                        Move Down<img className='ml-2 w-12 h-12' src="https://img.icons8.com/android/24/000000/down.png" alt="Move Down" />
+                    <button className="px-6 py-3 text-black text-3xl font-semibold flex items-center justify-center h-1/6" onClick={() => moveMario('down')} >
+                        <img className='ml-2 w-12 h-1/6' src="https://img.icons8.com/android/24/000000/down.png" alt="Move Down" />
+                        Move Down
                     </button>
-                    <button className="px-6 py-3 text-black text-5xl font-semibold flex items-center justify-center" onClick={() => moveMario('left')}>
-                        Move Left<img className='ml-2 w-12 h-12' src="https://img.icons8.com/android/24/000000/left.png" alt="Move Left" />
+                    <button className="px-6 py-3 text-black text-3xl font-semibold flex items-center justify-center h-1/6" onClick={() => moveMario('left')} >
+                        <img className='ml-2 w-12 h-1/6' src="https://img.icons8.com/android/24/000000/left.png" alt="Move Left" />
+                        Move Left
                     </button>
-                    <button className="px-6 py-3 text-black text-5xl font-semibold flex items-center justify-center" onClick={() => moveMario('right')}>
-                        Move Right<img className='ml-2 w-12 h-12' src="https://img.icons8.com/android/24/000000/right.png" alt="Move Right" />
+                    <button className="px-6 py-3 text-black text-3xl font-semibold flex items-center justify-center h-1/6" onClick={() => moveMario('right')} >
+                        <img className='ml-2 w-12 h-1/6' src="https://img.icons8.com/android/24/000000/right.png" alt="Move Right" />
+                        Move Right
                     </button>
                 </div>
-                <div className='mt-auto'>
-                    <button className="bg-green-500 rounded-xl px-20 py-4 text-white text-4xl mb-4 mr-12 justify-center" onClick={handleReset}>
+                <div className='mt-auto px-6 py-3 w-1/6'>
+                    <button className="bg-green-500 rounded-xl px-20 py-4 text-white text-4xl mb-4 mr-12 justify-center " onClick={handleReset}>
                         Run
                     </button>
                 </div>

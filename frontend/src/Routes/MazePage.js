@@ -18,7 +18,7 @@ const MazePage = () => {
     return (
       <div className=''>
           <Sidebar/>
-          <div className="ml-64 scale-75 ">
+          <div className="ml-64">
               <Maze maze={maze} />
           </div>
       </div>
