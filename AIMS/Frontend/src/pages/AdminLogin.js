@@ -4,6 +4,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { UserContext } from "../providers/UserContext";
 import { setItemsInLocalStorage } from "../utils";
+import { jwtDecode } from 'jwt-decode';
+
 const Login = () => {
   const {setIsAuthen} = useContext(UserContext);
 
@@ -20,7 +22,11 @@ const Login = () => {
             navigate("/admin");
             setIsAuthen("admin");
             setItemsInLocalStorage("isAuthen", "admin");
-            setItemsInLocalStorage("userId", response.data.data.id);
+            const decodedToken = jwtDecode(response.data.data);
+            console.log(decodedToken.userId);
+            setItemsInLocalStorage("username", decodedToken.sub);
+            setItemsInLocalStorage("userId", decodedToken.userId);
+
         }
       })
       .catch((error) => {

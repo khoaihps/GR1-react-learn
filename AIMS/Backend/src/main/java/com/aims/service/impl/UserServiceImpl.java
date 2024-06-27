@@ -8,6 +8,7 @@ import com.aims.exception.UserNotFoundException;
 import com.aims.repository.UserRepository;
 import com.aims.service.UserService;
 import com.aims.utils.Constants;
+import com.aims.utils.JwtUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String username, String password, String role) {
+    public String login(String username, String password, String role) {
         User user = userRepository.findAll().stream()
                 .filter(u -> u.getUsername().equals(username))
                 .findFirst()
@@ -95,7 +96,9 @@ public class UserServiceImpl implements UserService {
             }
             if (user.getRole().equals(role)) {
                 if (user.getPassword().equals(password)) {
-                    return user;
+                    JwtUtil jwtUtil = new JwtUtil();
+                    String userId = user.getId();
+                    return jwtUtil.generateToken(username, role, userId);
                 } else {
                     throw new IncorrectPasswordException("Incorrect password");
                 }
